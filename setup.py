@@ -1,4 +1,7 @@
 from cx_Freeze import setup, Executable
+import os
+
+os.system('pip3 install -r requirements.txt')
 
 base = None    
 

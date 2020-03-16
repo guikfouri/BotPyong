@@ -13,18 +13,19 @@ class PyongForaBot():
         self.url = 'https://login.globo.com/login/4728?tam=widget&url=https%3A%2F%2Fintervencao.globo.com%2Fintervencoes%2Fshow.do%3Fpopin%3Dtrue%26servicoId%3D4728%26urlIntervencao%3Dhttps%3A%2F%2Fs.glbimg.com%2Fgl%2Fba%2Fbarra-globocom.callback.html%2523https%253A%252F%252Fgshow.globo.com%252Frealities%252Fbbb%252Fbbb20%252Fvotacao%252Fparedao-bbb20-quem-voce-quer-eliminar-babu-pyong-ou-rafa-6bb86a70-ac24-48e7-bdb8-a6cd83009ef3.ghtml'
 
     def findBrowserVersion(self):
-        # self.browser_version = (self.driver.capabilities['browserVersion'])
-        self.browser_version = '80'
-        path = os.getcwd()  
-        path += '/Drivers/' + str(self.browser_version[0:2]) + '.exe'
-        print(path)
-        return path
-
-    def openDriver(self, path):
-        self.driver = webdriver.Chrome(executable_path=path)  # Inicia o browser
-        self.driver.get(self.url)  # Acessar a URL especificada
+        while True:
+            try:
+                self.browser_version = '80'
+                path = os.getcwd()  
+                path += '/Drivers/' + str(self.browser_version[0:2]) + '.exe'
+                self.driver = webdriver.Chrome(executable_path=path)
+                break
+            except WebDriverException:
+                self.browser_version += 1
 
     def login(self):
+        self.driver.get(self.url)  # Acessar a URL especificada
+
         with open('login.json') as f:
             data = json.load(f)
             login = data['login']
@@ -51,8 +52,8 @@ class PyongForaBot():
             except:
                 pass
 
-bot = PyongForaBot()
-path = bot.findBrowserVersion()
-bot.openDriver(path)
-bot.login()
-bot.vote()
+if __name__ == '__main__':
+    bot = PyongForaBot()
+    bot.findBrowserVersion()
+    bot.login()
+    bot.vote()
